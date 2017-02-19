@@ -1,0 +1,26 @@
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+FROM jupyterhub/jupyterhub-onbuild:0.6.1
+
+# Install jupyterhub and its dependencies
+RUN /opt/conda/bin/pip install \
+    jupyterhub==0.6.* \
+# At the moment, we need to pull from the master branch, as the latest changes
+# for oauthenticator and dockerspawner have not been pushed to pypi
+    git+https://github.com/jupyterhub/oauthenticator@master \
+    git+https://github.com/jupyterhub/dockerspawner@master
+
+# install docker on the jupyterhub container
+RUN wget https://get.docker.com -q -O /tmp/getdocker && \
+    chmod +x /tmp/getdocker && \
+    sh /tmp/getdocker
+
+# Copy TLS certificate and key
+ENV SSL_CERT /srv/jupyterhub/secrets/jupyterhub.crt
+ENV SSL_KEY /srv/jupyterhub/secrets/jupyterhub.key
+COPY ./secrets/*.crt $SSL_CERT
+COPY ./secrets/*.key $SSL_KEY
+RUN chmod 700 /srv/jupyterhub/secrets && \
+    chmod 600 /srv/jupyterhub/secrets/*
+
+COPY ./userlist /srv/jupyterhub/userlist
