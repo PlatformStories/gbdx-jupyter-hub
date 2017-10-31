@@ -1,5 +1,7 @@
 # gbdx-jupyter-hub
 
+**This repository is not maintained. For a hosted notebook environment, please visit [https://notebooks.geobigdata.io](https://notebooks.geobigdata.io)**
+
 This repo contains instructions and supplementary material in order to create a multi-user hub
 which spawns, manages, and proxies multiple instances of the single-user Jupyter notebook server on
 an AWS instance, using either GitHub or GBDX OAuth for authentication.
